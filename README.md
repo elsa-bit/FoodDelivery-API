@@ -2,6 +2,7 @@
 
 npm install express
 npm install dotenv
+npm install pg
 
 # Lancer le serveur
-node index.js
+node index.mjs
