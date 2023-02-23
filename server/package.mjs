@@ -8,7 +8,7 @@ routerPackage.get('/package', async (req, res) => {
     try {
         const id = req.query.idPackage;
 
-        const getPackage = await pools.query('SELECT id_package, package_name, package_weight, package_deadline, package_note, package_destination_number, package_destination_street, package_destination_city, package_destination_zip, package_recovery_city FROM package WHERE id_package=$1', [id]);
+        const getPackage = await pools.query('SELECT id, package_name, package_weight, package_deadline, package_note, package_destination_number, package_destination_street, package_destination_city, package_destination_zip, package_recovery_city FROM package WHERE id=$1', [id]);
         if (getPackage.rows.length > 0) {
             res.json({ status: 200, package: getPackage.rows[0], error: null });
         } else {
