@@ -11,14 +11,16 @@ routerLogin.get('/login', async (req, res) => {
 
         const getLogin = await pools.query('SELECT employer_email, employer_password FROM employer WHERE employer_email=$1 AND employer_password=$2', [email, password]);
         if (getLogin.rows.length > 0) {
-            res.json({ status: 200, package: getLogin.rows[0], error: null });
+            res.json({ status: 200, login: getLogin.rows[0], error: null });
         } else {
-            res.status(401).send("This login does not exist");
+            res.json({status:401, login: {}, error:"This login does not exist"})
+            //res.status(401).send({status:401, login: {}, error:"This login does not exist"});
         }
         pools.end;
     } catch (error) {
         console.error(error);
-        res.status(500).send("Error server");
+        res.json({status:500, login: {}, error:"Error server"})
+        //res.status(500).send("Error server");
     }
     res.end
 });
