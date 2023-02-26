@@ -35,8 +35,6 @@ routerEmployer.post('/createEmployer', async (req, res) => {
   res.end
 });
 
-
-
 routerEmployer.post('/login', async (req, res) => {
   try {
     const email = req.query.email;
