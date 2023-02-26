@@ -5,6 +5,24 @@ const routerPackage = express.Router();
 
 const pools = pool.pool
 
+routerPackage.get('/package', async (req, res) => {
+    try {
+        const id = req.query.idPackage;
+
+        const getPackage = await pools.query('SELECT id, package_name, package_weight, package_deadline, package_note, package_destination_number, package_destination_street, package_destination_city, package_destination_zip, package_recovery_city FROM package WHERE id=$1', [id]);
+        if (getPackage.rows.length > 0) {
+            res.json({ status: 200, package: getPackage.rows, error: null });
+        } else {
+            res.status(401).send("There are no packages for this id");
+        }
+        pools.end;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error server");
+    }
+    res.end
+});
+
 routerPackage.get('/packageEmployer', async (req, res) => {
     try {
         const id_employer = req.query.idEmployer;
