@@ -53,4 +53,23 @@ routerDelivery.put('/editDelivery', async (req, res) => {
     res.end
 });
 
+routerDelivery.delete('/deleteDelivery', async (req, res) => {
+    try {
+        const id = req.query.idDelivery;
+        const verifyDeleted = await pools.query('SELECT * FROM delivery WHERE id=$1', [id]);
+
+        if (verifyDeleted.rows.length > 0) {
+            await pools.query('DELETE FROM delivery WHERE id=$1', [id]);
+            res.json({ status: 200, delivery: "Success", error: null });
+        } else {
+            res.status(401).send("This delivery cannot be found");
+        }
+        pools.end;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error server");
+    }
+    res.end
+});
+
 export default routerDelivery
