@@ -14,20 +14,16 @@ routerEmployer.post('/createEmployer', async (req, res) => {
         const employer_email = req.query.employer_email;
         const employer_password = req.query.employer_password;
 
-
         const countEmployer = await pools.query('SELECT COUNT(*) FROM employer WHERE employer_email = $1', [employer_email])
         let countEmployerLastname = countEmployer.rows[0].count
 
         const cryptpassword = await bcrypt.hash(employer_password, 10);
 
         if (countEmployerLastname == 0) {
-
-            //id	employer_name	employer_firstname	employer_phone	employer_email	employer_password	employer_photo
-
-
-            await pools.query('INSERT INTO employer (employer_name , employer_firstname, employer_phone, employer_email, employer_password ) VALUES ($1,$2,$3,$4,$5)',
+            const result = await pools.query('INSERT INTO employer (employer_name , employer_firstname, employer_phone, employer_email, employer_password ) VALUES ($1,$2,$3,$4,$5) RETURNING id',
                 [employer_name, employer_firstname, employer_phone, employer_email, cryptpassword]);
-            res.json({ status: 200, employer: "Success", error: null });
+                const employer_id = result.rows[0].id;
+            res.json({ status: 200, employer: employer_id, error: null });
         } else {
             res.status(401).send("The insertion could not be performed because this email already exists");
         }
