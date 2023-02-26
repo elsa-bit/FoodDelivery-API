@@ -39,6 +39,22 @@ routerPackage.get('/package_unassigned', async (req, res) => {
     res.end
 });
 
+routerPackage.get('/package_assigned', async (req, res) => {
+    try {
+        const getPackage = await pools.query('SELECT id, package_name, package_destination_city FROM package WHERE package_id_employer IS NOT NULL and package_id_delivery IS NOT NULL ORDER BY package_deadline');
+        if (getPackage.rows.length > 0) {
+            res.json({ status: 200, employer: getPackage.rows, error: null });
+        } else {
+            res.status(401).send("There are no package assignated");
+        }
+        pools.end;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error server");
+    }
+    res.end
+});
+
 routerPackage.get('/packageSpecialEmployer', async (req, res) => {
     try {
         const id_employer = req.query.idEmployer;
