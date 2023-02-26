@@ -34,7 +34,6 @@ routerADDDeliverer.post('/deliverer', async (req, res) => {
         let idLocation = JSON.parse(data)
         idLocation = idLocation["package"].id_location;
         idLocation++;
-        console.log(idLocation)
         await client.query('BEGIN');
         await client.query('INSERT INTO location (location_latitude, location_longitude) VALUES ($1, $2)', [latitude, longitude]);
         await client.query('INSERT INTO deliverer (deliverer_name, deliverer_firstname, deliverer_email, deliverer_password, deliverer_phone, deliverer_photo, deliverer_evaluation, deliverer_location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);', [name, firstname, email, password, phone, photo, evaluation, idLocation]);

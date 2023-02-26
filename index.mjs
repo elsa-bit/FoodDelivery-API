@@ -6,6 +6,8 @@ import routerDELeliver from "./server/delete/deliverer.mjs";
 import routerUPDDeliverer from "./server/update/deliverer.mjs";
 import routerADDDeliverer from "./server/add/deliverer.mjs";
 import routerLastLocation from "./server/location.mjs";
+import routerEmployer from "./server/add/employer.mjs";
+import routerDelivery from "./server/get/delivery.mjs";
 
 const app = express()
 
@@ -16,6 +18,9 @@ app.use('/api', routerDELeliver);
 app.use('/api', routerUPDDeliverer);
 app.use('/api', routerADDDeliverer);
 app.use('/api', routerLastLocation);
+app.use('/api', routerEmployer);
+app.use('/api', routerDelivery);
+
 app.listen(2000, () => { 
-    console.log("Serveur à l'écoute sur http://localhost:2000")       
+    console.log("Serveur à l'écoute sur http://localhost:2000")  ;
 })

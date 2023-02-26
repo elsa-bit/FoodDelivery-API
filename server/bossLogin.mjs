@@ -9,7 +9,7 @@ routerLogin.get('/login', async (req, res) => {
         const email = req.query.email;
         const password = req.query.password;
 
-        const getLogin = await pools.query('SELECT employer_email, employer_password FROM employer WHERE employer_email=$1 AND employer_password=$2', [email, password]);
+        const getLogin = await pools.query('SELECT id, employer_email, employer_password FROM employer WHERE employer_email=$1 AND employer_password=$2', [email, password]);
         if (getLogin.rows.length > 0) {
             res.json({ status: 200, employer: getLogin.rows[0], error: null });
         } else {
@@ -20,7 +20,7 @@ routerLogin.get('/login', async (req, res) => {
         pools.end;
     } catch (error) {
         console.error(error);
-        res.json({status:500, employer_email: null, employer_password: null, error:"Error server"})
+        res.json({status:500, employer: {}, error:"Error server"})
         //res.status(500).send("Error server");
     }
     res.end
