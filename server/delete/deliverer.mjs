@@ -1,10 +1,10 @@
 import express from 'express'
-import pool from '../dbConfig.mjs'
+import pool from '../../dbConfig.mjs'
 
 const pools = pool.pool
 const routerDELeliver = express.Router()
 
-routerDELeliver.post('/deliverer/:id', async (req, res) => {
+routerDELeliver.delete('/deliverer/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const getDeliverers = await pools.query('DELETE FROM deliverer WHERE id_deliverer=$1', [id]);
