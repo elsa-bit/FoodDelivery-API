@@ -41,14 +41,14 @@ routerEmployer.post('/createEmployer', async (req, res) => {
 
 
 
-routerEmployer.get('/login', async (req, res) => {
+routerEmployer.post('/login', async (req, res) => {
     try {
         const email = req.query.email;
         const password = req.query.password;
 
-        const getLogin = await pools.query('SELECT employer_email, employer_password FROM employer WHERE employer_email=$1 AND employer_password=$2', [email, password]);
+        const getLogin = await pools.query('SELECT id, employer_email, employer_password FROM employer WHERE employer_email=$1 AND employer_password=$2', [email, password]);
         if (getLogin.rows.length > 0) {
-            res.json({ status: 200, login: getLogin.rows[0], error: null });
+            res.json({ status: 200, employer: getLogin.rows[0], error: null });
         } else {
             res.json({status:401, login: {}, error:"This login does not exist"})
         }
@@ -59,23 +59,5 @@ routerEmployer.get('/login', async (req, res) => {
     }
     res.end
 });
-/*
-routerPackage.get('/packageDelivery', async (req, res) => {
-    try {
-        const id_delivery = req.query.idDelivery;
-
-        const getPackage = await pools.query('SELECT id, package_name, package_destination_city, package_recovery_city FROM package WHERE package_id_delivery=$1 ORDER BY package_deadline', [id_delivery]);
-        if (getPackage.rows.length > 0) {
-            res.json({ status: 200, package: getPackage.rows, error: null });
-        } else {
-            res.status(401).send("There are no packages for this delivery");
-        }
-        pools.end;
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error server");
-    }
-    res.end
-});*/
 
 export default routerEmployer
