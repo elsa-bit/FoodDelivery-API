@@ -4,10 +4,10 @@ import routerLogin from "./server/bossLogin.mjs";
 import routerDeliverers from "./server/deliverers.mjs";
 import routerDELeliver from "./server/delete/deliverer.mjs";
 import routerUPDDeliverer from "./server/update/deliverer.mjs";
-import routerADDDeliverer from "./server/add/deliverer.mjs";
+import routerADDDeliverer from "./server/deliverer.mjs";
 import routerLastLocation from "./server/location.mjs";
-import routerEmployer from "./server/add/employer.mjs";
-import routerDelivery from "./server/get/delivery.mjs";
+import routerEmployer from './server/employer.mjs';
+import routerDelivery from "./server/delivery.mjs";
 
 const app = express()
 
