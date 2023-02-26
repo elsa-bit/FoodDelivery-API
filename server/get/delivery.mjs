@@ -4,6 +4,28 @@ import pool from '../../dbConfig.mjs'
 const routerDelivery = express.Router();
 const pools = pool.pool
 
+routerDelivery.post('/createDelivery', async (req, res) => {
+    try {
+        const id = req.query.idEmployer;
+
+    const countEmployer = await pools.query('SELECT COUNT(*) FROM employer WHERE id = $1', [id])
+    let countEmployerTotal = countEmployer.rows[0].count
+
+    if (countEmployerTotal != 0) {
+        const result = await pools.query('INSERT INTO delivery (delivery_date , id_employer) VALUES (now(),$1)',
+        [id]);
+    res.json({ status: 200, delivery: "Success", error: null });
+    } else {
+        res.status(401).send("The insertion could not be performed because this employer does not exists");
+    }
+    pools.end;
+    } catch (error) {
+    console.error(error);
+    res.status(500).send("Error server");
+    }
+    res.end
+});
+
 routerDelivery.get('/employerDelivery', async (req, res) => {
     try {
         const id = req.query.idEmployer;
