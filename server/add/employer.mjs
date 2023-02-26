@@ -35,6 +35,22 @@ routerEmployer.post('/createEmployer', async (req, res) => {
   res.end
 });
 
+routerEmployer.get('/employers', async (req, res) => {
+  try {
+    const getEmployer = await pools.query('SELECT id, employer_name, employer_firstname FROM employer ORDER BY id');
+    if (getEmployer.rows.length > 0) {
+      res.json({ status: 200, employer: getEmployer.rows, error: null });
+    } else {
+      res.status(401).send("There are no employer");
+    }
+    pools.end;
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error server");
+  }
+  res.end
+});
+
 
 routerEmployer.post('/login', async (req, res) => {
   try {
