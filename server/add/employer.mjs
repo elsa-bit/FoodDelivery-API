@@ -37,7 +37,7 @@ routerEmployer.post('/createEmployer', async (req, res) => {
 
 
 
-/*routerEmployer.post('/login', async (req, res) => {
+routerEmployer.post('/login', async (req, res) => {
   try {
     const email = req.query.email;
     const password = req.query.password;
@@ -54,6 +54,6 @@ routerEmployer.post('/createEmployer', async (req, res) => {
     res.json({status:500, login: {}, error:"Error server"})
   }
   res.end
-});*/
+});
 
 export default routerEmployer
