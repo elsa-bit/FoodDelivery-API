@@ -99,4 +99,26 @@ routerPackage.put('/chooseDelivery', async (req, res) => {
     res.end
 });
 
+routerPackage.put('/chooseEmployer', async (req, res) => {
+    try {
+        const id_employer= req.query.idEmployer;
+        const id_package = req.query.idPackage;
+
+        await pools.query('UPDATE package SET package_id_employer=$1  WHERE id=$2', [id_employer, id_package]);
+            const verifyModificated = await pools.query('SELECT package_id_employer FROM package WHERE id=$1', [id_package]);
+            
+        if (id_employer == verifyModificated.rows[0].package_id_employer) {
+            res.json({ status: 200, package: "Success", error: null });
+        } else {
+            res.status(401).send("The modification could not be performed");
+        }
+        
+        pools.end;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error server");
+    }
+    res.end
+});
+
 export default routerPackage
