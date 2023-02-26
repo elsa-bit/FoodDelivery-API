@@ -55,6 +55,26 @@ routerPackage.get('/package_assigned', async (req, res) => {
     res.end
 });
 
+routerPackage.get('/specialPackage', async (req, res) => {
+    try {
+        const id_package = req.query.idPackage;
+
+        const getPackage = await pools.query('SELECT id, package_name, package_weight, package_deadline, package_destination_number, package_destination_street, package_destination_city, package_destination_zip, package_recovery_city, package_id_employer, package_id_delivery, package_trackingid FROM package WHERE id=$1', [id_package]);
+        if (getPackage.rows.length > 0) {
+            const employer_id = getPackage.rows[0].package_id_employer
+            const getEmployer = await pools.query('SELECT id, employer_name, employer_firstname FROM employer WHERE id=$1', [employer_id]);
+            res.json({ status: 200, package: getPackage.rows[0],employer: getEmployer.rows[0], error: null });
+        } else {
+            res.status(401).send("There are no packages for this id");
+        }
+        pools.end;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error server");
+    }
+    res.end
+});
+
 routerPackage.get('/packageSpecialEmployer', async (req, res) => {
     try {
         const id_employer = req.query.idEmployer;
