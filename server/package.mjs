@@ -5,6 +5,7 @@ const routerPackage = express.Router();
 
 const pools = pool.pool
 
+
 routerPackage.get('/package', async (req, res) => {
     try {
         const id = req.query.idPackage;
@@ -191,4 +192,4 @@ routerPackage.put('/chooseEmployer', async (req, res) => {
     res.end
 });
 
-export default routerPackage
+export default routerPackage;

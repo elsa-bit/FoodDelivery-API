@@ -1,5 +1,5 @@
 import express from 'express'
-import pool from '../dbConfig.mjs'
+import pool from '../../dbConfig.mjs'
 
 const routerDelivery = express.Router();
 const pools = pool.pool
@@ -8,21 +8,21 @@ routerDelivery.post('/createDelivery', async (req, res) => {
     try {
         const id = req.query.idEmployer;
 
-    const countEmployer = await pools.query('SELECT COUNT(*) FROM employer WHERE id = $1', [id])
-    let countEmployerTotal = countEmployer.rows[0].count
+        const countEmployer = await pools.query('SELECT COUNT(*) FROM employer WHERE id = $1', [id])
+        let countEmployerTotal = countEmployer.rows[0].count
 
-    if (countEmployerTotal != 0) {
-        const result = await pools.query('INSERT INTO delivery (delivery_date , id_employer) VALUES (now(),$1) RETURNING id',
-        [id]);
-        const delivery_id = result.rows[0].id;
-    res.json({ status: 200, delivery: delivery_id, error: null });
-    } else {
-        res.status(401).send("The insertion could not be performed because this employer does not exists");
-    }
-    pools.end;
+        if (countEmployerTotal != 0) {
+            const result = await pools.query('INSERT INTO delivery (delivery_date , id_employer) VALUES (now(),$1) RETURNING id',
+              [id]);
+            const delivery_id = result.rows[0].id;
+            res.json({ status: 200, delivery: delivery_id, error: null });
+        } else {
+            res.status(401).send("The insertion could not be performed because this employer does not exists");
+        }
+        pools.end;
     } catch (error) {
-    console.error(error);
-    res.status(500).send("Error server");
+        console.error(error);
+        res.status(500).send("Error server");
     }
     res.end
 });
@@ -65,7 +65,7 @@ routerDelivery.put('/editDelivery', async (req, res) => {
         } else {
             res.status(401).send("The modification could not be performed");
         }
-        
+
         pools.end;
     } catch (error) {
         console.error(error);
