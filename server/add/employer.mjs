@@ -56,7 +56,7 @@ routerEmployer.post('/login', async (req, res) => {
         res.status(401).send("Invalid password");
       }
     } else {
-      res.status(401).send("User doesn't exist");
+      res.status(401).send("Employer doesn't exist");
     }
     pools.end;
   } catch (error) {
