@@ -12,9 +12,10 @@ routerDelivery.post('/createDelivery', async (req, res) => {
     let countEmployerTotal = countEmployer.rows[0].count
 
     if (countEmployerTotal != 0) {
-        const result = await pools.query('INSERT INTO delivery (delivery_date , id_employer) VALUES (now(),$1)',
+        const result = await pools.query('INSERT INTO delivery (delivery_date , id_employer) VALUES (now(),$1) RETURNING id',
         [id]);
-    res.json({ status: 200, delivery: "Success", error: null });
+        const delivery_id = result.rows[0].id;
+    res.json({ status: 200, delivery: delivery_id, error: null });
     } else {
         res.status(401).send("The insertion could not be performed because this employer does not exists");
     }
@@ -57,10 +58,8 @@ routerDelivery.put('/editDelivery', async (req, res) => {
         const city = req.query.city;
         const date = req.query.date
 
-        await pools.query('UPDATE delivery SET delivery_date=$1, delivery_location=$2 WHERE id=$3', [date, city,
-            id]);
-            const verifyModificated = await pools.query('SELECT delivery_date, delivery_location, id_employer FROM delivery WHERE id=$1', [id]);
-            
+        await pools.query('UPDATE delivery SET delivery_date=$1, delivery_location=$2 WHERE id=$3', [date, city,id]);
+        const verifyModificated = pools.query('SELECT delivery_date, delivery_location, id_employer FROM delivery WHERE id=$1', [id]);
         if (city == verifyModificated.rows[0].delivery_location && date == verifyModificated.rows[0].delivery_date) {
             res.json({ status: 200, delivery: "Success", error: null });
         } else {

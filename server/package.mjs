@@ -11,7 +11,7 @@ routerPackage.get('/package', async (req, res) => {
 
         const getPackage = await pools.query('SELECT id, package_name, package_weight, package_deadline, package_note, package_destination_number, package_destination_street, package_destination_city, package_destination_zip, package_recovery_city FROM package WHERE id=$1', [id]);
         if (getPackage.rows.length > 0) {
-            res.json({ status: 200, package: getPackage.rows, error: null });
+            res.json({ status: 200, package: getPackage.rows[0], error: null });
         } else {
             res.status(401).send("There are no packages for this id");
         }
@@ -45,7 +45,7 @@ routerPackage.get('/package_unassigned', async (req, res) => {
     try {
         const getPackage = await pools.query('SELECT id, package_name, package_destination_city FROM package WHERE package_id_employer IS NULL ORDER BY package_deadline');
         if (getPackage.rows.length > 0) {
-            res.json({ status: 200, employer: getPackage.rows, error: null });
+            res.json({ status: 200, package: getPackage.rows, error: null });
         } else {
             res.status(401).send("There are no package unassignated");
         }
@@ -61,7 +61,7 @@ routerPackage.get('/package_assigned', async (req, res) => {
     try {
         const getPackage = await pools.query('SELECT id, package_name, package_destination_city FROM package WHERE package_id_employer IS NOT NULL and package_id_delivery IS NOT NULL ORDER BY package_deadline');
         if (getPackage.rows.length > 0) {
-            res.json({ status: 200, employer: getPackage.rows, error: null });
+            res.json({ status: 200, package: getPackage.rows, error: null });
         } else {
             res.status(401).send("There are no package assignated");
         }
